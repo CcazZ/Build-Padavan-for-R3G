@@ -46,17 +46,18 @@ jobs:
         cd /opt/rt-n56u/toolchain-mipsel
         sh dl_toolchain.sh
         mkdir -p /opt/images/
+        sed -i '/cp -f configs\/templates\/\$1.config .config/d' /opt/rt-n56u/trunk/build_firmware_modify
 
     - name: Edit .config
       run: |
-        #if [ ! -f /opt/rt-n56u/trunk/configs/templates/$TNAME.config ] ; then
-        #echo "$TNAME.config not found "
-        #exit 1
-        #fi
-        #cp -f /opt/rt-n56u/trunk/configs/templates/$TNAME.config .config
-        #chmod +x diy.sh
-        #sh diy.sh
-        cp -f r3g.config /opt/rt-n56u/trunk/.config
+        if [ ! -f /opt/rt-n56u/trunk/configs/templates/$TNAME.config ] ; then
+        echo "$TNAME.config not found "
+        exit 1
+        fi
+        cp -f /opt/rt-n56u/trunk/configs/templates/$TNAME.config .config
+        chmod +x diy.sh
+        sh diy.sh
+        cp -f .config /opt/rt-n56u/trunk/
 
     - name: Build Firmware
       run: |
