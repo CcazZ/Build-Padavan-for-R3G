@@ -1,0 +1,73 @@
+name: Build Padavan for Xiaomi Router 3G
+
+on:
+  
+  release:
+    types: published
+  push:
+    branches:
+      - master
+    paths:
+      - 'r3g.config'
+  schedule:
+    - cron: 0 16 * * *
+  watch:
+    types: started
+
+env:
+  TNAME: MI-R3G
+  UPLOAD_FIRMWARE: true
+  UPLOAD_COWTRANSFER: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    if: github.event.repository.owner.id == github.event.sender.id
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@master
+
+    - name: Initialization environment
+      env:
+        DEBIAN_FRONTEND: noninteractive
+      run: |
+        sudo -E apt-get -qq update
+        sudo -E apt-get -qq install unzip libtool-bin curl cmake gperf gawk flex bison nano xxd fakeroot \
+        cpio git python-docutils gettext automake autopoint texinfo build-essential help2man \
+        pkg-config zlib1g-dev libgmp3-dev libmpc-dev libmpfr-dev libncurses5-dev libltdl-dev wget
+        sudo -E apt-get -qq autoremove --purge
+        sudo -E apt-get -qq clean
+        sudo timedatectl set-timezone 'Asia/Shanghai'
+
+    - name: Clone source code
+      run: |
+        git clone --depth=1 https://github.com/hanwckf/rt-n56u /opt/rt-n56u
+        cd /opt/rt-n56u/toolchain-mipsel
+        sh dl_toolchain.sh
+        mkdir -p /opt/images/
+
+    - name: Edit .config
+      run: |
+        #if [ ! -f /opt/rt-n56u/trunk/configs/templates/$TNAME.config ] ; then
+        #echo "$TNAME.config not found "
+        #exit 1
+        #fi
+        #cp -f /opt/rt-n56u/trunk/configs/templates/$TNAME.config .config
+        #chmod +x diy.sh
+        #sh diy.sh
+        cp -f r3g.config /opt/rt-n56u/trunk/.config
+
+    - name: Build Firmware
+      run: |
+        cd /opt/rt-n56u/trunk
+        sudo ./clear_tree
+        sudo ./build_firmware_modify $TNAME 0
+        sudo mv -f images/*.trx /opt/images/
+
+    - name : Upload packages
+      uses: actions/upload-artifact@master
+      if: always()
+      with:
+        name: Padavan-packages
+        path: /opt/images
