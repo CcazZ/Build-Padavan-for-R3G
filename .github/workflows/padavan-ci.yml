@@ -4,11 +4,6 @@ on:
   
   release:
     types: published
-  push:
-    branches:
-      - master
-    paths:
-      - 'r3g.config'
   schedule:
     - cron: 0 16 * * *
   watch:
