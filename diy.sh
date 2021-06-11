@@ -65,4 +65,3 @@ echo "CONFIG_FIRMWARE_INCLUDE_SRELAY=n" >> .config #可以不集成
 echo "CONFIG_FIRMWARE_INCLUDE_WYY=y" >> .config #网易云解锁
 echo "CONFIG_FIRMWARE_INCLUDE_WYYBIN=n" >> .config #网易云解锁GO版本执行文件（4M多）注意固件超大小,不集成会自动下载
 echo "CONFIG_FIRMWARE_INCLUDE_ZEROTIER=y" >> .config #zerotier ~1.3M
-echo "CONFIG_FIRMWARE_INCLUDE_DDNSTO=y" >> .config #DDNSTO
