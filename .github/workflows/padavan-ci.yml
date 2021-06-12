@@ -47,14 +47,15 @@ jobs:
 
     - name: Edit .config
       run: |
-        if [ ! -f /opt/rt-n56u/trunk/configs/templates/$TNAME.config ] ; then
+        cp -f diy.sh /opt/rt-n56u/trunk/
+        cd /opt/rt-n56u/trunk/
+        if [ ! -f configs/templates/$TNAME.config ] ; then
         echo "$TNAME.config not found "
         exit 1
         fi
-        cp -f /opt/rt-n56u/trunk/configs/templates/$TNAME.config .config
+        cp -f configs/templates/$TNAME.config .config
         chmod +x diy.sh
         sh diy.sh
-        cp -f .config /opt/rt-n56u/trunk/
 
     - name: Build Firmware
       run: |
