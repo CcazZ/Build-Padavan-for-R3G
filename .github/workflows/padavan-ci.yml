@@ -37,31 +37,36 @@ jobs:
     - name: Clone source code
       run: |
         git clone --depth=1 https://github.com/hanwckf/rt-n56u /opt/rt-n56u
-        cd /opt/rt-n56u/toolchain-mipsel
-        mkdir -p toolchain-3.4.x
-        wget https://github.com/hanwckf/padavan-toolchain/releases/download/v1.1/mipsel-linux-uclibc.tar.xz
-        tar -xvf mipsel-linux-uclibc.tar.xz -C toolchain-3.4.x
         mkdir -p /opt/images/
-        sed -i '/cp -f configs\/templates\/\$1.config .config/d' /opt/rt-n56u/trunk/build_firmware_modify
+
+    - name: Run shellcheck
+      run: |
+        cd /opt/rt-n56u/
+        sh ./trunk/tools/shellcheck.sh
+
+    - name: Prepare toolchain
+      run: |
+        cd /opt/rt-n56u/toolchain-mipsel
+        sh dl_toolchain.sh
 
     - name: Edit .config
       run: |
-        cp -f diy.sh /opt/rt-n56u/trunk/
-        cd /opt/rt-n56u/trunk/
-        if [ ! -f configs/templates/$TNAME.config ] ; then
+        cp -f diy.sh /opt/rt-n56u/trunk/configs/templates/
+        cd /opt/rt-n56u/trunk/configs/templates/
+        if [ ! -f $TNAME.config ] ; then
         echo "$TNAME.config not found "
         exit 1
         fi
-        cp -f configs/templates/$TNAME.config .config
+        cp -f $TNAME.config .config
         chmod +x diy.sh
         sh diy.sh
+        mv -f .config $TNAME.config
 
     - name: Build Firmware
       run: |
         cd /opt/rt-n56u/trunk
-        sudo ./clear_tree
-        sudo ./build_firmware_modify $TNAME 0
-        sudo mv -f images/*.trx /opt/images/
+        fakeroot ./build_firmware_modify $TNAME
+        sudo mv -f images/* /opt/images/
 
     - name : Upload packages
       uses: actions/upload-artifact@master
