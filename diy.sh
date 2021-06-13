@@ -6,10 +6,10 @@ WIFI_PASSWORD="1234567890"              # wifi密码，切记密码最少8位 ad
 VERSION_TIME=$(date "+%Y%m%d")          # 自动时间更新时版本号: 20200320
 DEFAULT_PATH="./user/shared/defaults.h" # 默认文件配置目录
 
-echo '修改用户名'
+echo "修改用户名"
 sed -i 's/#define\s*SYS_USER_ROOT\s*"admin"/#define  SYS_USER_ROOT     "'$USER_NAME'"/g' $DEFAULT_PATH
 
-echo '修改密码'
+echo "修改密码"
 sed -i 's/#define\s*DEF_ROOT_PASSWORD\s*"admin"/#define  DEF_ROOT_PASSWORD     "'$USER_PASSWORD'"/g' $DEFAULT_PATH
 
 echo "修改Lan ip"
