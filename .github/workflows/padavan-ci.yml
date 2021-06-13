@@ -50,22 +50,12 @@ jobs:
         sh dl_toolchain.sh
 
     - name: Edit .config
-      run: |
-        #cp -f diy.sh /opt/rt-n56u/trunk/configs/templates/
-        #cd /opt/rt-n56u/trunk/configs/templates/
-        #if [ ! -f $TNAME.config ] ; then
-        #echo "$TNAME.config not found "
-        #exit 1
-        #fi
-        #cp -f $TNAME.config .config
-        #chmod +x diy.sh
-        #sh diy.sh
-        #mv -f .config $TNAME.config
-        if [ ! -f configs/templates/$TNAME.config ] ; then
-        echo "$TNAME.config not found "
-        exit 1
-        fi
+      run: |      
+        cp -f diy.sh /opt/rt-n56u/trunk/
         cp -f configs/templates/$TNAME.config /opt/rt-n56u/trunk/configs/templates/$TNAME.config
+        cd /opt/rt-n56u/trunk/
+        chmod +x diy.sh
+        sh diy.sh
 
     - name: Build Firmware
       run: |
