@@ -65,7 +65,7 @@ jobs:
         echo "$TNAME.config not found "
         exit 1
         fi
-        cp -f configs/templates/$TNAME.config /opt/rt-n56u/trunk/$TNAME.config
+        cp -f configs/templates/$TNAME.config /opt/rt-n56u/trunk/configs/templates/$TNAME.config
 
     - name: Build Firmware
       run: |
