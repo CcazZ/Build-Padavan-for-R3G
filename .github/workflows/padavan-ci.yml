@@ -61,7 +61,7 @@ jobs:
       run: |
         cd /opt/rt-n56u/trunk
         fakeroot ./build_firmware_modify $TNAME
-        sudo mv -f images/*.trx /opt/images/
+        sudo mv -f images/MI-R3G_3.4.3.9-099.trx /opt/images/Padavan_MI-R3G_$(date +'%Y%m%d-%H%M%S').trx
         sudo mv -f .config /opt/images/$TNAME.config
 
     - name : Upload packages
