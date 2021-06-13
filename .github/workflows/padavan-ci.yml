@@ -68,5 +68,5 @@ jobs:
       uses: actions/upload-artifact@master
       if: always()
       with:
-        name: Padavan_$TNAME
+        name: Padavan_MI-R3G
         path: /opt/images
