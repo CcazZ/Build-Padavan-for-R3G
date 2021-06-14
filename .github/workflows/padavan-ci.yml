@@ -3,6 +3,11 @@ name: Build Padavan for Xiaomi Router 3G
 on:
   release:
     types: published
+  push:
+    branches:
+      - main
+    paths:
+      - 'configs/templates/MI-R3G.config'
   schedule:
     - cron: 0 16 * * *
   watch:
