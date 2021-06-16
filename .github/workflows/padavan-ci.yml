@@ -39,7 +39,7 @@ jobs:
 
     - name: Clone source code
       run: |
-        git clone --depth=1 https://github.com/hanwckf/rt-n56u /opt/rt-n56u
+        git clone --depth=1 https://github.com/chongshengB/rt-n56u /opt/rt-n56u
         mkdir -p /opt/images/
 
     - name: Run shellcheck
@@ -52,18 +52,15 @@ jobs:
         cd /opt/rt-n56u/toolchain-mipsel
         sh dl_toolchain.sh
 
-    - name: Edit .config
+    - name: Load files
       run: |      
-        cp -f diy.sh /opt/rt-n56u/trunk/
+        cp -f build_firmware_modify /opt/rt-n56u/
         cp -f configs/templates/$TNAME.config /opt/rt-n56u/trunk/configs/templates/$TNAME.config
-        cd /opt/rt-n56u/trunk/
-        chmod +x diy.sh
-        sh diy.sh
 
     - name: Build Firmware
       run: |
         cd /opt/rt-n56u/trunk
-        fakeroot ./build_firmware_modify $TNAME
+        fakeroot ./build_firmware_modify $TNAME 0
         sudo mv -f images/MI-R3G_3.4.3.9-099.trx /opt/images/Padavan_MI-R3G_$(date +'%Y%m%d-%H%M%S').trx
         sudo mv -f .config /opt/images/$TNAME.config
 
